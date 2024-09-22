@@ -1,9 +1,9 @@
 import { Alert } from "react-bootstrap";
-import FormCadDepartamento from "./Formularios/FormCadDepartamento"; // Corrigido
-import TabelaDepartamento from "./Tabelas/TabelaDepartamento"; // Corrigido
+import FormCadDepartamento from "./Formularios/FormCadDepartamento"; 
+import TabelaDepartamento from "./Tabelas/TabelaDepartamento"; 
 import Pagina from "../Templates/Pagina";
 import { useEffect, useState, useContext } from "react";
-import { consultarTodos } from "../../servicos/departamentoService"; // Ajuste conforme necessário
+import { consultarTodos } from "../../servicos/departamentoService"; 
 import { ContextoUsuarioLogado } from "../../App";
 
 export default function TelaCadastroDepartamento(props) {

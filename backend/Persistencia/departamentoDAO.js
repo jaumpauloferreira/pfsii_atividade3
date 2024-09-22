@@ -54,6 +54,7 @@ export default class DepartamentoDAO{
         }
         const conexao = await conectar();
         const [registros, campos] = await conexao.execute(sql,parametros);
+        global.poolConexoes.releaseConnection(conexao);
         let listaDepartamentos = [];
         for (const registro of registros){
             const departamento = new Departamento(registro.dep_codigo,registro.dep_nome);
