@@ -40,9 +40,9 @@ app.use(session({
 
 // Rotas
 app.use('/login', rotaLogin);
-app.use('/departamento', rotaDepartamento);
-app.use('/funcionario', rotaFuncionario);
-app.use('/autenticacao', rotaAutenticacao);
+app.use('/departamento',rotaDepartamento);
+app.use('/funcionario',rotaFuncionario);
+app.use('/autenticacao',rotaAutenticacao);
 
 // Inicia o servidor
 app.listen(porta, host, () => {

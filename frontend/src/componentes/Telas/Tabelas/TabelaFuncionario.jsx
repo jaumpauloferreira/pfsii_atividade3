@@ -1,27 +1,25 @@
 import { Button, Container, Table } from "react-bootstrap";
-import { excluir } from '../../../servicos/funcionarioService'; // Corrigir o nome da função de exclusão
+import { excluir } from '../../../servicos/funcionarioService';
 import { ContextoUsuarioLogado } from "../../../App";
 import { useContext } from "react";
 
 export default function TabelaFuncionario(props) {
     const contextoUsuario = useContext(ContextoUsuarioLogado);
 
-    // Função para excluir um funcionário
     function handleExcluirFuncionario(funcionario) {
         const token = contextoUsuario.usuarioLogado.token;
         if (window.confirm(`Deseja excluir o funcionário ${funcionario.nome}?`)) {
-            excluir(funcionario.codigo, token) // Passar o código do funcionário para o serviço
+            excluir(funcionario.codigo, token)
                 .then((resposta) => {
-                    props.setAtualizarTela(true); // Atualizar a tela após exclusão
-                    alert(resposta.mensagem); // Exibir mensagem de sucesso
+                    props.setAtualizarTela(true);
+                    alert(resposta.mensagem);
                 })
                 .catch((erro) => {
-                    alert("Erro ao enviar a requisição: " + erro.message); // Exibir mensagem de erro
+                    alert("Erro ao enviar a requisição: " + erro.message);
                 });
         }
     }
 
-    // Função para alterar um funcionário
     function handleAlterarFuncionario(funcionario) {
         props.setFuncionarioSelecionado(funcionario);
         props.setModoEdicao(true);
@@ -38,18 +36,22 @@ export default function TabelaFuncionario(props) {
                     <tr>
                         <th>Código</th>
                         <th>Nome</th>
-                        <th>Telefone</th>
-                        <th>Endereço</th>
+                        <th>Data de Admissão</th>
+                        <th>Cargo</th>
+                        <th>Departamento</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {props.listaDeFuncionarios?.map((funcionario) => (
+                    {props.listaDeFuncionarios?.filter(funcionario => funcionario && funcionario.codigo && funcionario.nome).map((funcionario) => (
                         <tr key={funcionario.codigo}>
                             <td>{funcionario.codigo}</td>
                             <td>{funcionario.nome}</td>
-                            <td>{funcionario.telefone}</td>
-                            <td>{funcionario.endereco}</td>
+                            <td>
+                                {new Date(funcionario.dataAdmissao).toLocaleDateString('pt-BR')}
+                            </td>
+                            <td>{funcionario.cargo}</td>
+                            <td>{funcionario.departamento?.nome || 'N/A'}</td>
                             <td>
                                 <Button variant="warning" onClick={() => handleAlterarFuncionario(funcionario)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil" viewBox="0 0 16 16">
@@ -59,8 +61,7 @@ export default function TabelaFuncionario(props) {
                                 {" "}
                                 <Button variant="danger" onClick={() => handleExcluirFuncionario(funcionario)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
-                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                        <path d="M5.5 5.5v7a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0-.5.5zm6.5 6v-6a1 1 0 0 1-1-1H4a1 1 0 0 1-1 1v6a1 1 0 0 1-1 1h9a1 1 0 0 1 1-1zM1 2h14a1 1 0 0 1 1 1v1H0V3a1 1 0 0 1 1-1zM3 4v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V4H3z"/>
                                     </svg>
                                 </Button>
                             </td>
@@ -71,3 +72,4 @@ export default function TabelaFuncionario(props) {
         </Container>
     );
 }
+

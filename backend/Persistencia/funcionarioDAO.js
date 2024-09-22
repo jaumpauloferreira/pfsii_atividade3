@@ -98,3 +98,5 @@ export default class FuncionarioDAO {
         return listaFuncionarios;
     }
 }
+
+

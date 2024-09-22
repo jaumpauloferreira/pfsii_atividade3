@@ -2,14 +2,27 @@ import { Button } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { ContextoUsuarioLogado } from '../../../App';
 import { alterar, gravar } from '../../../servicos/funcionarioService';
 
+
 export default function FormCadFuncionarios(props) {
     const contextoUsuario = useContext(ContextoUsuarioLogado);
-    const [funcionario, setFuncionario] = useState(props.funcionarioSelecionado);
+    const [funcionario, setFuncionario] = useState({
+        codigo: 0,
+        nome: "",
+        dataAdmissao: "",
+        cargo: "",
+        departamento: ""
+    });
     const [validado, setValidado] = useState(false);
+
+    useEffect(() => {
+        if (props.modoEdicao) {
+            setFuncionario(props.funcionarioSelecionado);
+        }
+    }, [props.funcionarioSelecionado, props.modoEdicao]);
 
     function manipularMudanca(evento) {
         setFuncionario({
@@ -19,7 +32,7 @@ export default function FormCadFuncionarios(props) {
     }
 
     function manipularSubmissao(evento) {
-        evento.preventDefault(); // Previne o comportamento padrão do formulário
+        evento.preventDefault();
         const token = contextoUsuario.usuarioLogado.token;
         const formulario = evento.currentTarget;
 
@@ -33,14 +46,14 @@ export default function FormCadFuncionarios(props) {
                         props.setExibirTabela(true);
                         if (props.modoEdicao) {
                             props.setModoEdicao(false);
-                            resetarFormulario();
                         }
+                        resetarFormulario();
                     }
                 })
                 .catch((erro) => {
                     alert("Erro ao enviar a requisição: " + erro.message);
                 });
-                
+
             setValidado(false);
         } else {
             setValidado(true);
